@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+     - name: Build without Test
+       run: mvn clean install -DskipTests
+     - name: Build with Test
+       run: mvn clean install
+     - name: Build and Push Docker Image
+       uses: mr-smithers-excellent/docker-build-push@v6
+       with:
+         image: iskrabozhkova/hello-world-app
+         registry: docker.io
+         username: ${{secrets.DOCKER_USERNAME}}
+         password: ${{secrets.SOCKER_PASSWORD}
+      #run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
